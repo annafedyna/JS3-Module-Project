@@ -70,3 +70,8 @@
   color: #333;
   line-height: 1.4;
 }
+
+
+.hidden-card{
+  display: none;
+}
