@@ -4,8 +4,9 @@ function setup() {
 }
 
 function addZero(num) {
-  return num < 10 ? '0' + num : num
+  return num < 10 ? `0${num}` : num
 }
+
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
   createEpisodeCards(episodeList, rootElem);
