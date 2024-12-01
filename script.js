@@ -8,6 +8,10 @@ function addZero(num) {
 }
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
+  createEpisodeCards(episodeList, rootElem);
+}
+
+function createEpisodeCards(episodeList, rootElem) {
   episodeList.forEach((episode) => {
     newCard = document.createElement("div");
     newCard.classList.add("card");
@@ -21,3 +25,4 @@ function makePageForEpisodes(episodeList) {
 }
 
 window.onload = setup;
+
