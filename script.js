@@ -9,20 +9,19 @@ function addZero(num) {
 
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
-  createEpisodeCards(episodeList, rootElem);
+  const episodeCards = episodeList.map(createEpisodeCards)
+  rootElem.append(...episodeCards)
 }
 
-function createEpisodeCards(episodeList, rootElem) {
-  episodeList.forEach((episode) => {
-    newCard = document.createElement("div");
+function createEpisodeCards(episode) {
+  const newCard = document.createElement("div");
     newCard.classList.add("card");
     newCard.innerHTML = `<div class = "title-card">${episode.name} - S${addZero(
       episode.season
     )}E${addZero(episode.number)}</div>;
     <img src="${episode.image.medium}" alt="${episode.name}" />
     <p>${episode.summary}</p>`;
-    rootElem.append(newCard);
-  });
+  return newCard
 }
 
 window.onload = setup;
