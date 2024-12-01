@@ -30,16 +30,20 @@ function createEpisodeCards(episode) {
 function displayMatchingEpisodes(){
   const liveSearchInput = document.querySelector("#live-search");
   const episodeListItems = document.querySelectorAll(".card");
-  liveSearchInput.addEventListener('input', ()=>{
-    const liveSearchInputValue = liveSearchInput.value.toLowerCase()
+  liveSearchInput.addEventListener('input', ()=> {
+    filterEpisodeBySearch(episodeListItems, liveSearchInput)
+  })
+}
+
+function filterEpisodeBySearch(episodeListItems, liveSearchInput){
+  const liveSearchInputValue = liveSearchInput.value.toLowerCase()
     episodeListItems.forEach(episode =>{
       if(episode.textContent.toLowerCase().includes(liveSearchInputValue)){
         episode.classList.remove('hidden-card')
       } else{
         episode.classList.add('hidden-card')
       }
-    })
-  })
+})
 }
 
 window.onload = setup;
