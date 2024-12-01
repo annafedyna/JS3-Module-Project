@@ -37,8 +37,12 @@ function displayMatchingEpisodes(){
 
 function filterEpisodeBySearch(episodeListItems, liveSearchInput){
   const liveSearchInputValue = liveSearchInput.value.toLowerCase()
+  let countMatchEpisode = 0
     episodeListItems.forEach(episode =>{
       if(episode.textContent.toLowerCase().includes(liveSearchInputValue)){
+        countMatchEpisode++
+        const episodeMatchNumberEl = document.querySelector('#episode-match-number')
+        episodeMatchNumberEl.textContent = `Displaying: ${countMatchEpisode}/${episodeListItems.length} episode (s)`
         episode.classList.remove('hidden-card')
       } else{
         episode.classList.add('hidden-card')
