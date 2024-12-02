@@ -1,12 +1,13 @@
 #root {
   color: rgb(90, 66, 66);
   text-align: center;
-  background-color: rgb(204, 204, 204);
+  background-color: rgb(206, 204, 204);
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 13px;
   padding: 20px;
   justify-items: center;
+  margin: 10px
 }
 
 @media (min-width: 1200px) {
@@ -74,4 +75,21 @@
 
 .hidden-card{
   display: none;
+}
+
+#live-search {
+  width: 100%;              
+  max-width: 400px;      
+  padding: 8px 10px;       
+  font-size: 16px;     
+  border: 2px solid #ccc;    
+  border-radius: 5px;    
+  outline: none;             
+  transition: border-color 0.3s, box-shadow 0.3s; 
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); 
+  margin: 8px;
+}
+
+.search-container{
+  margin: 15px 30px;
 }

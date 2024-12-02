@@ -9,9 +9,17 @@
   </head>
 
   <body>
-    <label for="live-search"></label>
-      <input type="text" name="live-search" id="live-search">
-      <span id="episode-match-number"></span>
+    <div class="search-container">
+    <label for="live-search" id="search-label" class="search-label">Search Episodes:</label>
+    <input 
+      type="text" 
+      name="live-search" 
+      id="live-search" 
+      placeholder="Search by episode name or text..." 
+      class="search-input">
+    <span id="episode-match-number" class="match-number"></span>
+    </div>
+    <div id="loading-message" style="display:none;">Loading episodes...</div>
     <div id="root">
     </div>
     <script src="episodes.js"></script>
