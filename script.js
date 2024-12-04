@@ -64,9 +64,10 @@ document.body.insertBefore(
   document.querySelector("#live-search")
 );
 
+const episodeSelector = document.querySelector("#episode-selector");
+
 function makeListOfEpisodeToSelect(allEpisodes) {
   const episodeOptionList = allEpisodes.map(createEpisodeToSelect);
-  const episodeSelector = document.querySelector("#episode-selector");
   episodeSelector.append(...episodeOptionList);
 }
 
@@ -81,4 +82,19 @@ function createEpisodeToSelect(episode) {
   return episodeOption;
 }
 //========================================================
+
+episodeSelector.addEventListener('change', (event)=>{
+  const selectedEpisodeName = event.target.value.toLowerCase()
+  const episodeListItems = document.querySelectorAll(".card");
+  episodeListItems.forEach(episode =>{
+    const episodeText = episode.textContent.toLocaleLowerCase()
+    if(episodeText.includes(selectedEpisodeName)){
+      episode.style.display = 'block'
+    }else {
+      episode.style.display = 'none'
+    } 
+  })
+})
+
+
 window.onload = setup;
