@@ -52,7 +52,7 @@ function filterEpisodeBySearch(episodeListItems, liveSearchInput) {
   });
 }
 
-//===============Episode Selector Feature============================
+//===============Episode Selector creation Feature============================
 const episodeSelectorTemplate = document.querySelector(
   "#episode-selector-temp"
 );
@@ -81,20 +81,24 @@ function createEpisodeToSelect(episode) {
 
   return episodeOption;
 }
-//========================================================
 
-episodeSelector.addEventListener('change', (event)=>{
-  const selectedEpisodeName = event.target.value.toLowerCase()
+//====================Filter by Drop Down Select Feature=========================
+function filterEpisodeUsingDropDown(event) {
+  const selectedEpisodeName = event.target.value.toLowerCase();
   const episodeListItems = document.querySelectorAll(".card");
-  episodeListItems.forEach(episode =>{
-    const episodeText = episode.textContent.toLocaleLowerCase()
-    if(episodeText.includes(selectedEpisodeName)){
-      episode.style.display = 'block'
-    }else {
-      episode.style.display = 'none'
-    } 
-  })
-})
-
+  episodeListItems.forEach((episode) => {
+    const episodeText = episode.textContent.toLocaleLowerCase();
+    if (episodeText.includes(selectedEpisodeName)) {
+      episode.style.display = "block";
+    } else {
+      episode.style.display = "none";
+    }
+  });
+}
+//event lister for drop down option selection
+episodeSelector.addEventListener("change", (event) => {
+  filterEpisodeUsingDropDown(event);
+});
+//=========================================================
 
 window.onload = setup;
