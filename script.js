@@ -3,7 +3,7 @@ function setup() {
   makePageForEpisodes(allEpisodes);
 
   displayMatchingEpisodes();
-  makeListOfEpisodeToSelect(allEpisodes)
+  makeListOfEpisodeToSelect(allEpisodes);
 }
 
 function addZero(num) {
@@ -64,20 +64,21 @@ document.body.insertBefore(
   document.querySelector("#live-search")
 );
 
-function makeListOfEpisodeToSelect(allEpisodes){
+function makeListOfEpisodeToSelect(allEpisodes) {
   const episodeOptionList = allEpisodes.map(createEpisodeToSelect);
-  const episodeSelector = document.querySelector('#episode-selector')
-  episodeSelector.append(...episodeOptionList)
+  const episodeSelector = document.querySelector("#episode-selector");
+  episodeSelector.append(...episodeOptionList);
 }
 
 function createEpisodeToSelect(episode) {
   const episodeOption = document.createElement("option");
   episodeOption.value = episode.name;
-  episodeOption.textContent = `S${addZero(episode.season)}E${
-    episode.number
-  } - ${episode.name}`;
+  const formattedSeason = `S${addZero(episode.season)}`;
+  const formattedEpisode = `E${addZero(episode.number)}`;
+  const episodeName = episode.name;
+  episodeOption.textContent = `${formattedSeason}${formattedEpisode} - ${episodeName}`;
 
-  return episodeOption
+  return episodeOption;
 }
 //========================================================
 window.onload = setup;
