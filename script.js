@@ -52,4 +52,10 @@ function filterEpisodeBySearch(episodeListItems, liveSearchInput){
 })
 }
 
+//create section of episode selector
+const episodeSelectorTemplate = document.querySelector('#episode-selector-temp')
+const episodeSelectorTemplateClone = episodeSelectorTemplate.content.cloneNode(true)
+const episodeOption = episodeSelectorTemplateClone.querySelector('#episode-data')
+document.body.insertBefore(episodeSelectorTemplateClone, document.querySelector('#live-search'))
 window.onload = setup;
+
