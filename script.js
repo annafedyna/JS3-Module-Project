@@ -3,6 +3,7 @@ function setup() {
   makePageForEpisodes(allEpisodes);
 
   displayMatchingEpisodes();
+  makeListOfEpisodeToSelect(allEpisodes)
 }
 
 function addZero(num) {
@@ -51,25 +52,23 @@ function filterEpisodeBySearch(episodeListItems, liveSearchInput) {
   });
 }
 
-//create section of episode selector
+//===============Episode Selector Feature============================
 const episodeSelectorTemplate = document.querySelector(
   "#episode-selector-temp"
 );
 const episodeSelectorTemplateClone =
   episodeSelectorTemplate.content.cloneNode(true);
-// const episodeOption = episodeSelectorTemplateClone.querySelector('#episode-data')
+//insert selector template before live search
 document.body.insertBefore(
   episodeSelectorTemplateClone,
   document.querySelector("#live-search")
 );
 
-const allEpisodes = getAllEpisodes();
-
-const episodeOptionList = [];
-allEpisodes.forEach((episode) => {
-  const episodeToSelect = createEpisodeToSelect(episode)
-  console.log(episodeToSelect)
-});
+function makeListOfEpisodeToSelect(allEpisodes){
+  const episodeOptionList = allEpisodes.map(createEpisodeToSelect);
+  const episodeSelector = document.querySelector('#episode-selector')
+  episodeSelector.append(...episodeOptionList)
+}
 
 function createEpisodeToSelect(episode) {
   const episodeOption = document.createElement("option");
@@ -80,4 +79,5 @@ function createEpisodeToSelect(episode) {
 
   return episodeOption
 }
+//========================================================
 window.onload = setup;
