@@ -1,9 +1,18 @@
-function setup() {
-  const allEpisodes = getAllEpisodes();
-  makePageForEpisodes(allEpisodes);
+async function setup() {
+  const loadingMessage = document.getElementById("loading-message");
+  loadingMessage.style.display = "block";
 
-  displayMatchingEpisodes();
-  makeListOfEpisodeToSelect(allEpisodes);
+  try {
+    const allEpisodes = await getData();
+    makePageForEpisodes(allEpisodes);
+    displayMatchingEpisodes();
+    makeListOfEpisodeToSelect(allEpisodes);
+  } catch (error) {
+    throw new Error(`Response status: ${response.status}`);
+  } finally {
+    loadingMessage.style.display = "none"; 
+  }
+
 }
 
 function addZero(num) {
@@ -51,7 +60,6 @@ function filterEpisodeBySearch(episodeListItems, liveSearchInput) {
     }
   });
 }
-
 //===============Episode Selector creation Feature============================
 const episodeSelectorTemplate = document.querySelector(
   "#episode-selector-temp"
@@ -94,6 +102,18 @@ function filterEpisodeUsingDropDown(event) {
       episode.style.display = "none";
     }
   });
+async function getData() {
+  const url = "https://api.tvmaze.com/shows/82/episodes";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Response status: ${response.status}`);
+  }
 }
 //event lister for drop down option selection
 episodeSelector.addEventListener("change", (event) => {
