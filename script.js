@@ -7,12 +7,26 @@ async function setup() {
     makePageForEpisodes(allEpisodes);
     displayMatchingEpisodes();
     makeListOfEpisodeToSelect(allEpisodes);
+    filterEpisodeUsingDropDown();
   } catch (error) {
     throw new Error(`Response status: ${response.status}`);
   } finally {
-    loadingMessage.style.display = "none"; 
+    loadingMessage.style.display = "none";
   }
+}
 
+async function getData() {
+  const url = "https://api.tvmaze.com/shows/82/episodes";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    throw new Error(`Response status: ${response.status}`);
+  }
 }
 
 function addZero(num) {
@@ -36,6 +50,7 @@ function createEpisodeCards(episode) {
   return newCard;
 }
 
+// ============================  LIVE SEARCH  =============================
 function displayMatchingEpisodes() {
   const liveSearchInput = document.querySelector("#live-search");
   const episodeListItems = document.querySelectorAll(".card");
@@ -86,6 +101,7 @@ function createEpisodeToSelect(episode) {
   const formattedEpisode = `E${addZero(episode.number)}`;
   const episodeName = episode.name;
   episodeOption.textContent = `${formattedSeason}${formattedEpisode} - ${episodeName}`;
+  episodeOption.classList.add("episode-option");
 
   return episodeOption;
 }
@@ -102,18 +118,6 @@ function filterEpisodeUsingDropDown(event) {
       episode.style.display = "none";
     }
   });
-async function getData() {
-  const url = "https://api.tvmaze.com/shows/82/episodes";
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    throw new Error(`Response status: ${response.status}`);
-  }
 }
 //event lister for drop down option selection
 episodeSelector.addEventListener("change", (event) => {
