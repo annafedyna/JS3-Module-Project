@@ -23,6 +23,8 @@ async function getData() {
     return await response.json();
   } catch (error) {
     throw new Error(`Response status: ${response.status}`);
+  } finally {
+    loadingMessage.style.display = "none";
   }
   
 }
