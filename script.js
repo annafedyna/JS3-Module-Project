@@ -1,21 +1,18 @@
+const state = {
+  allEpisodes: [],
+};
 async function setup() {
-  const loadingMessage = document.getElementById("loading-message");
-  loadingMessage.style.display = "block";
-
-  try {
-    const allEpisodes = await getData();
-    makePageForEpisodes(allEpisodes);
-    displayMatchingEpisodes();
-    makeListOfEpisodeToSelect(allEpisodes);
-    filterEpisodeUsingDropDown();
-  } catch (error) {
-    throw new Error(`Response status: ${response.status}`);
-  } finally {
-    loadingMessage.style.display = "none";
-  }
+  state.allEpisodes = await getData().then((episodes) => {
+    return episodes;
+  });
+  makePageForEpisodes(state.allEpisodes);
+  displayMatchingEpisodes();
+  makeListOfEpisodeToSelect(state.allEpisodes); 
 }
 
 async function getData() {
+  const loadingMessage = document.getElementById("loading-message");
+  loadingMessage.style.display = "block";
   const url = "https://api.tvmaze.com/shows/82/episodes";
   try {
     const response = await fetch(url);
@@ -27,6 +24,7 @@ async function getData() {
   } catch (error) {
     throw new Error(`Response status: ${response.status}`);
   }
+  
 }
 
 function addZero(num) {
@@ -109,6 +107,7 @@ function createEpisodeToSelect(episode) {
 //====================Filter by Drop Down Select Feature=========================
 function filterEpisodeUsingDropDown(event) {
   const selectedEpisodeName = event.target.value.toLowerCase();
+  console.log(selectedEpisodeName);
   const episodeListItems = document.querySelectorAll(".card");
   episodeListItems.forEach((episode) => {
     const episodeText = episode.textContent.toLocaleLowerCase();
