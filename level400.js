@@ -11,6 +11,7 @@ function createShowSelector(show) {
 
 function renderShowOptions(shows) {
   const showOptions = shows.map(createShowSelector);
+  showOptions.sort((a, b) => a.textContent.localeCompare(b.textContent));
   showSelector.append(...showOptions);
 }
 
