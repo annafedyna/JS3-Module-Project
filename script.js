@@ -1,3 +1,5 @@
+import { renderShowOptions } from "./level400.js";
+
 const state = {
   allEpisodes: [],
 };
@@ -7,13 +9,14 @@ async function setup() {
   });
   makePageForEpisodes(state.allEpisodes);
   displayMatchingEpisodes();
-  makeListOfEpisodeToSelect(state.allEpisodes); 
+  makeListOfEpisodeToSelect(state.allEpisodes);
+  renderShowOptions(state.allEpisodes);
 }
 
 async function getData() {
   const loadingMessage = document.getElementById("loading-message");
   loadingMessage.style.display = "block";
-  const url = "https://api.tvmaze.com/shows/82/episodes";
+  const url = "https://api.tvmaze.com/shows";
   try {
     const response = await fetch(url);
     if (!response.ok) {
@@ -26,7 +29,6 @@ async function getData() {
   } finally {
     loadingMessage.style.display = "none";
   }
-  
 }
 
 function addZero(num) {
