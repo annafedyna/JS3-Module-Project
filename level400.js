@@ -2,7 +2,7 @@ const showSelector = document.querySelector("#show-selector");
 
 function createShowSelector(show) {
   const showOption = document.createElement("option");
-  showOption.value = show.name;
+  showOption.value = show.id; // Use show.id as the value
   const showName = show.name;
   showOption.textContent = showName;
   showOption.classList.add("show-option");
