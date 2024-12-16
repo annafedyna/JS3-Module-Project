@@ -1,16 +1,24 @@
-import { renderShowOptions } from "./level400.js";
+import { renderShowOptions, getAllEpisodePeShowFetch } from "./level400.js";
 
 const state = {
+  allShows: [],
   allEpisodes: [],
 };
 async function setup() {
-  state.allEpisodes = await getData().then((episodes) => {
+  state.allShows = await getData().then((episodes) => {
     return episodes;
   });
-  makePageForEpisodes(state.allEpisodes);
+  makePageForEpisodes(state.allShows);
   displayMatchingEpisodes();
-  makeListOfEpisodeToSelect(state.allEpisodes);
-  renderShowOptions(state.allEpisodes);
+  makeListOfEpisodeToSelect(state.allShows);
+  renderShowOptions(state.allShows);
+
+  document.querySelector("#show-selector").addEventListener("change", async () => {
+    for(let show of state.allShows){
+      state.allEpisodes = await getAllEpisodePeShowFetch(show.id);
+    }
+    console.log(state);
+  });
 }
 
 async function getData() {
