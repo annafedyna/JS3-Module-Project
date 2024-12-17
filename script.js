@@ -1,8 +1,5 @@
-import {
-  renderShowOptions,
-  getAllEpisodePeShowFetch,
-  showSelector,
-} from "./level400.js";
+import { renderShowOptions, showSelector } from "./createShowSelector.js";
+import { getAllEpisodePerShowFetch } from "./getEpisodesFetch.js";
 
 const state = {
   allShows: [],
@@ -16,14 +13,14 @@ async function setup() {
   // Add event listener to the show selector
   showSelector.addEventListener("change", async (event) => {
     const showId = event.target.value;
-    state.allEpisodes = await getAllEpisodePeShowFetch(showId);
+    state.allEpisodes = await getAllEpisodePerShowFetch(showId);
     updateEpisodes(state.allEpisodes);
   });
 
   // Initial load: fetch and display episodes for the first show
   if (state.allShows.length > 0) {
     const firstShowId = state.allShows[0].id;
-    state.allEpisodes = await getAllEpisodePeShowFetch(firstShowId);
+    state.allEpisodes = await getAllEpisodePerShowFetch(firstShowId);
     updateEpisodes(state.allEpisodes);
   }
 }
