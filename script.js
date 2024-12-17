@@ -16,20 +16,15 @@ async function setup() {
   // Add event listener to the show selector
   showSelector.addEventListener("change", async (event) => {
     const showId = event.target.value;
-    console.log(event);
     state.allEpisodes = await getAllEpisodePeShowFetch(showId);
-    makePageForEpisodes(state.allEpisodes);
-    makeListOfEpisodeToSelect(state.allEpisodes);
-    displayMatchingEpisodes();
+    updateEpisodes(state.allEpisodes);
   });
 
   // Initial load: fetch and display episodes for the first show
   if (state.allShows.length > 0) {
     const firstShowId = state.allShows[0].id;
     state.allEpisodes = await getAllEpisodePeShowFetch(firstShowId);
-    makePageForEpisodes(state.allEpisodes);
-    makeListOfEpisodeToSelect(state.allEpisodes);
-    displayMatchingEpisodes();
+    updateEpisodes(state.allEpisodes);
   }
 }
 
@@ -73,6 +68,13 @@ function createEpisodeCards(episode) {
     <img src="${imageUrl}" alt="${episode.name}" />
     <p>${episode.summary}</p>`;
   return newCard;
+}
+
+// Function to update episodes on the page
+function updateEpisodes(episodes) {
+  makePageForEpisodes(episodes);
+  makeListOfEpisodeToSelect(episodes);
+  displayMatchingEpisodes();
 }
 
 // ============================  LIVE SEARCH  =============================
@@ -136,7 +138,6 @@ function createEpisodeToSelect(episode) {
 //====================Filter by Drop Down Select Feature=========================
 function filterEpisodeUsingDropDown(event) {
   const selectedEpisodeName = event.target.value.toLowerCase();
-  console.log(selectedEpisodeName);
   const episodeListItems = document.querySelectorAll(".card");
   episodeListItems.forEach((episode) => {
     const episodeText = episode.textContent.toLocaleLowerCase();
