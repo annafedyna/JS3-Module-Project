@@ -23,4 +23,4 @@ async function getAllEpisodePeShowFetch(showId) {
   return data;
 }
 
-export { renderShowOptions, getAllEpisodePeShowFetch };
+export { renderShowOptions, getAllEpisodePeShowFetch, showSelector };

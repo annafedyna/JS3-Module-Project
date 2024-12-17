@@ -1,4 +1,8 @@
-import { renderShowOptions, getAllEpisodePeShowFetch } from "./level400.js";
+import {
+  renderShowOptions,
+  getAllEpisodePeShowFetch,
+  showSelector,
+} from "./level400.js";
 
 const state = {
   allShows: [],
@@ -8,14 +12,15 @@ const state = {
 async function setup() {
   state.allShows = await getData();
   renderShowOptions(state.allShows);
-  
+
   // Add event listener to the show selector
-  document.querySelector("#show-selector").addEventListener("change", async (event) => {
+  showSelector.addEventListener("change", async (event) => {
     const showId = event.target.value;
+    console.log(event);
     state.allEpisodes = await getAllEpisodePeShowFetch(showId);
     makePageForEpisodes(state.allEpisodes);
     makeListOfEpisodeToSelect(state.allEpisodes);
-    displayMatchingEpisodes()
+    displayMatchingEpisodes();
   });
 
   // Initial load: fetch and display episodes for the first show
@@ -24,7 +29,7 @@ async function setup() {
     state.allEpisodes = await getAllEpisodePeShowFetch(firstShowId);
     makePageForEpisodes(state.allEpisodes);
     makeListOfEpisodeToSelect(state.allEpisodes);
-    displayMatchingEpisodes()
+    displayMatchingEpisodes();
   }
 }
 
@@ -59,7 +64,9 @@ function makePageForEpisodes(episodeList) {
 function createEpisodeCards(episode) {
   const newCard = document.createElement("div");
   newCard.classList.add("card");
-  const imageUrl = episode.image ? episode.image.medium : "default-image-url.jpg"; // Provide a default image URL
+  const imageUrl = episode.image
+    ? episode.image.medium
+    : "default-image-url.jpg"; // Provide a default image URL
   newCard.innerHTML = `<div class="title-card">${episode.name} - S${addZero(
     episode.season
   )}E${addZero(episode.number)}</div>
