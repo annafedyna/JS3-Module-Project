@@ -59,18 +59,15 @@ function makePageForEpisodes(episodeList) {
 function createEpisodeCards(episode) {
   const newCard = document.createElement("div");
   newCard.classList.add("card");
-  const imageUrl = episode.image
-    ? episode.image.medium
-    : "default-image-url.jpg"; // Provide a default image URL
   newCard.innerHTML = `<div class="title-card">${episode.name} - S${addZero(
     episode.season
   )}E${addZero(episode.number)}</div>
-    <img src="${imageUrl}" alt="${episode.name}" />
+    <img src="${episode.image.medium}" alt="${episode.name}" />
     <p>${episode.summary}</p>`;
   return newCard;
 }
 
-// Function to update episodes on the page
+// updates episodes on the page
 function updateEpisodes(episodes) {
   makePageForEpisodes(episodes);
   makeListOfEpisodeToSelect(episodes);
