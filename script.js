@@ -1,32 +1,45 @@
+import { renderShowOptions, showSelector } from "./createShowSelector.js";
+import { getAllEpisodePerShowFetch } from "./getEpisodesFetch.js";
+
 const state = {
+  allShows: [],
   allEpisodes: [],
 };
+
 async function setup() {
-  state.allEpisodes = await getData().then((episodes) => {
-    return episodes;
+  state.allShows = await getData();
+  renderShowOptions(state.allShows);
+
+  // Add event listener to the show selector
+  showSelector.addEventListener("change", async (event) => {
+    const showId = event.target.value;
+    state.allEpisodes = await getAllEpisodePerShowFetch(showId);
+    updateEpisodes(state.allEpisodes);
   });
-  makePageForEpisodes(state.allEpisodes);
-  displayMatchingEpisodes();
-  makeListOfEpisodeToSelect(state.allEpisodes); 
+
+  // Initial load: fetch and display episodes for the first show
+  if (state.allShows.length > 0) {
+    const firstShowId = state.allShows[0].id;
+    state.allEpisodes = await getAllEpisodePerShowFetch(firstShowId);
+    updateEpisodes(state.allEpisodes);
+  }
 }
 
 async function getData() {
   const loadingMessage = document.getElementById("loading-message");
   loadingMessage.style.display = "block";
-  const url = "https://api.tvmaze.com/shows/82/episodes";
+  const url = "https://api.tvmaze.com/shows";
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-
     return await response.json();
   } catch (error) {
     throw new Error(`Response status: ${response.status}`);
   } finally {
     loadingMessage.style.display = "none";
   }
-  
 }
 
 function addZero(num) {
@@ -35,6 +48,7 @@ function addZero(num) {
 
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
+  rootElem.innerHTML = ""; // Clear previous episodes
   const episodeCards = episodeList.map(createEpisodeCards);
   rootElem.append(...episodeCards);
 }
@@ -42,12 +56,19 @@ function makePageForEpisodes(episodeList) {
 function createEpisodeCards(episode) {
   const newCard = document.createElement("div");
   newCard.classList.add("card");
-  newCard.innerHTML = `<div class = "title-card">${episode.name} - S${addZero(
+  newCard.innerHTML = `<div class="title-card">${episode.name} - S${addZero(
     episode.season
-  )}E${addZero(episode.number)}</div>;
+  )}E${addZero(episode.number)}</div>
     <img src="${episode.image.medium}" alt="${episode.name}" />
     <p>${episode.summary}</p>`;
   return newCard;
+}
+
+// updates episodes on the page
+function updateEpisodes(episodes) {
+  makePageForEpisodes(episodes);
+  makeListOfEpisodeToSelect(episodes);
+  displayMatchingEpisodes();
 }
 
 // ============================  LIVE SEARCH  =============================
@@ -75,6 +96,7 @@ function filterEpisodeBySearch(episodeListItems, liveSearchInput) {
     }
   });
 }
+
 //===============Episode Selector creation Feature============================
 const episodeSelectorTemplate = document.querySelector(
   "#episode-selector-temp"
@@ -91,6 +113,7 @@ const episodeSelector = document.querySelector("#episode-selector");
 
 function makeListOfEpisodeToSelect(allEpisodes) {
   const episodeOptionList = allEpisodes.map(createEpisodeToSelect);
+  episodeSelector.innerHTML = ""; // Clear previous options
   episodeSelector.append(...episodeOptionList);
 }
 
@@ -109,7 +132,6 @@ function createEpisodeToSelect(episode) {
 //====================Filter by Drop Down Select Feature=========================
 function filterEpisodeUsingDropDown(event) {
   const selectedEpisodeName = event.target.value.toLowerCase();
-  console.log(selectedEpisodeName);
   const episodeListItems = document.querySelectorAll(".card");
   episodeListItems.forEach((episode) => {
     const episodeText = episode.textContent.toLocaleLowerCase();
