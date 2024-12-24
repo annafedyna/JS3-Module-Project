@@ -9,16 +9,18 @@
   </head>
 
   <body>
+    <label for="show-selector">Select Show</label>
+    <select id="show-selector">
+    </select>
     <template id="episode-selector-temp">
       <select name="episode-selector" id="episode-selector">
         <option value="">All episodes</option>
       </select>
-    </template>    
+    </template>
     <input type="text" name="live-search" id="live-search" />
     <span id="episode-match-number"></span>
     <div id="loading-message" style="display: none">Loading episodes...</div>
     <div id="root"></div>
-    <script src="episodes.js"></script>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
