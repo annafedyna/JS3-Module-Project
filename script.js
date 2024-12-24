@@ -1,18 +1,12 @@
 async function setup() {
-  const loadingMessage = document.getElementById("loading-message");
-  loadingMessage.style.display = "block";
+  // const loadingMessage = document.getElementById("loading-message");
+  // loadingMessage.style.display = "block";
 
-  try {
-    const allEpisodes = await getData();
-    makePageForEpisodes(allEpisodes);
-    displayMatchingEpisodes();
-    makeListOfEpisodeToSelect(allEpisodes);
-    filterEpisodeUsingDropDown();
-  } catch (error) {
-    throw new Error(`Response status: ${response.status}`);
-  } finally {
-    loadingMessage.style.display = "none";
-  }
+  const allEpisodes = await getData();
+  makePageForEpisodes(allEpisodes);
+  displayMatchingEpisodes();
+  makeListOfEpisodeToSelect(allEpisodes);
+  filterEpisodeUsingDropDown();
 }
 
 async function getData() {
