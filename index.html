@@ -7,19 +7,37 @@
     <link href="style.css" rel="stylesheet" />
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   </head>
+  <header>
+    <h1>TV Shows</h1>
+  </header>
 
   <body>
+    <!-- Show Filter -->
+     <div class = "shows-navbar">
+        <label>Filtering for</label>
+        <input type="text" name="show-live-filter" id="show-live-filter" />
+        <span id="shows-match-number-filter"> All shows</span>
+        <select id="filtered-show-selector">
+        </select>
+        <div class = 'show-cards'></div>
+     </div>
+    
+    <!-- Show Selector -->
     <label for="show-selector">Select Show</label>
     <select id="show-selector">
     </select>
+    <!-- Template for selector -->
     <template id="episode-selector-temp">
       <select name="episode-selector" id="episode-selector">
         <option value="">All episodes</option>
       </select>
     </template>
+    <!-- Input seach -->
     <input type="text" name="live-search" id="live-search" />
     <span id="episode-match-number"></span>
+    <!-- Message -->
     <div id="loading-message" style="display: none">Loading episodes...</div>
+
     <div id="root"></div>
     <script type="module" src="script.js"></script>
   </body>
