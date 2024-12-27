@@ -94,3 +94,119 @@
   background-color: #f4f4f9;
 }
 
+
+/* ====================== show card ========================= */
+.show-card {
+  width: 93%;
+  padding: 20px;
+  margin: 50px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.show-card:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.title-show-card{
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.show-card img {
+  width: 30%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.show-card-main{
+  display: flex;
+  align-items: center;
+}
+.show-card-main p {
+  font-size: 18px;
+  color: #0a0909;
+  line-height: 1.6;
+  margin-bottom: 15px;
+  overflow: hidden;
+  width: 860px;
+}
+.show-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 18px;
+  color: #202020;
+  margin: 30px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+  margin: 90px 0;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* ================= Input =========== */
+label , #shows-match-number-filter{
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 8px;
+  display: inline-block;
+  color: #333;
+  padding-left: 5px;
+  line-height: 1.5;
+}
+
+input[type="text"] {
+  width: 200px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin: 10px;
+}
+
+/*  =========== Select ============ */
+
+select {
+  width: 20%; 
+  padding: 10px 15px;
+  margin: 5px; 
+  font-size: 16px; 
+  color: #333; 
+  background-color: #fff; 
+  border: 2px solid #ccc; 
+  border-radius: 4px; 
+  outline: none; 
+  box-sizing: border-box; 
+  transition: all 0.3s ease; 
+}
+
+select:hover {
+  border-color: #131212; 
+  border: 3px solid rgb(4, 30, 99)
+}
+
+select:focus {
+  border-color: #0056b3; 
+  box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+}
+
+@media screen and (max-width: 600px) {
+  .show-card {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
