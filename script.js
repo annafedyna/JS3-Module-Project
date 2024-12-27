@@ -1,15 +1,46 @@
 import { renderShowOptions, showSelector } from "./createShowSelector.js";
 import { getAllEpisodePerShowFetch } from "./getEpisodesFetch.js";
+import getData from "./services.js";
 
 const state = {
   allShows: [],
   allEpisodes: [],
 };
 
+
 async function setup() {
+  const showNavbar = document.querySelector(".show-cards");
+  const filterSearch = document.querySelector("#show-live-filter");
+  const filterDropDown = document.querySelector("#filtered-show-selector");
+  
+
   state.allShows = await getData();
   renderShowOptions(state.allShows);
+  renderShowCards(state.allShows, showNavbar);
 
+  filterSearch.addEventListener('input', (event) => {
+    filterDropDown.innerHTML = ``
+    let showFilteredNumber = document.querySelector(
+      "#shows-match-number-filter"
+    );
+    let count = 0;
+    const filterText = event.target.value.toLowerCase();
+    const showItems = document.querySelectorAll(".show-card");
+    showItems.forEach((show) => {
+      const showText = show.textContent.toLocaleLowerCase();
+      if (showText.includes(filterText)) {
+        show.style.display = "block";
+        let showName = show.querySelector(".title-show-card").textContent;
+        let newOption = document.createElement("option")
+        newOption.textContent = `${showName}`;
+        filterDropDown.append(newOption)
+        count += 1
+      } else {
+        show.style.display = "none";
+      }
+    });
+    showFilteredNumber.textContent= ` Found : ${count} shows`
+  })
   // Add event listener to the show selector
   showSelector.addEventListener("change", async (event) => {
     const showId = event.target.value;
@@ -25,22 +56,30 @@ async function setup() {
   }
 }
 
-async function getData() {
-  const loadingMessage = document.getElementById("loading-message");
-  loadingMessage.style.display = "block";
-  const url = "https://api.tvmaze.com/shows";
-  try {
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    throw new Error(`Response status: ${response.status}`);
-  } finally {
-    loadingMessage.style.display = "none";
-  }
+// ==================== show Card =====================
+function renderShowCards(shows, parent) {
+  shows.forEach((showData) => {
+    parent.append(createShowCard(showData));
+  });
 }
+
+function createShowCard(showData) {
+  const newCard = document.createElement("div");
+  newCard.classList.add('show-card')
+  newCard.innerHTML = `<div class="title-show-card">${showData.name}</div>
+  <div class= "show-card-main">
+    <img src="${showData.image.medium}" alt="${showData.name}" />
+    <p>${showData.summary}</p>
+    <div class = "show-info"><span>Rated: ${showData.rating.average}</span>
+    <span>Genres: ${showData.genres.join(" |  ")}</span>
+    <span>Status: ${showData.status}</span>
+    <span>RunTime : ${showData.runtime}</span></div>;
+  </div>`;
+    
+  return newCard;
+}
+
+
 
 function addZero(num) {
   return num < 10 ? `0${num}` : num;
@@ -103,7 +142,6 @@ const episodeSelectorTemplate = document.querySelector(
 );
 const episodeSelectorTemplateClone =
   episodeSelectorTemplate.content.cloneNode(true);
-//insert selector template before live search
 document.body.insertBefore(
   episodeSelectorTemplateClone,
   document.querySelector("#live-search")
