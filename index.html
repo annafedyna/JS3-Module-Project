@@ -14,31 +14,33 @@
   <body>
     <!-- Show Filter -->
      <div class = "shows-navbar">
-        <label>Filtering for</label>
-        <input type="text" name="show-live-filter" id="show-live-filter" />
-        <span id="shows-match-number-filter"> All shows</span>
+        <label>Filtering by</label>
+        <input type="text" name="show-live-filter" id="show-live-filter" placeholder="search text"/>
+        <span id="shows-match-number-filter"> Found:  </span>
         <select id="filtered-show-selector">
+          <option>All Shows</option>
         </select>
         <div class = 'show-cards'></div>
      </div>
     
-    <!-- Show Selector -->
-    <label for="show-selector">Select Show</label>
-    <select id="show-selector">
-    </select>
     <!-- Template for selector -->
     <template id="episode-selector-temp">
       <select name="episode-selector" id="episode-selector">
         <option value="">All episodes</option>
       </select>
     </template>
-    <!-- Input seach -->
-    <input type="text" name="live-search" id="live-search" />
-    <span id="episode-match-number"></span>
+
+    <div class = "episodes-navbar"> 
+      <button id = "back-to-shows"> Back to Shows Page</button>
+      <!-- Input seach -->
+      <input type="text" name="live-search" id="live-search" />
+      <span id="episode-match-number"></span>
+      <div id="root"></div>
+    </div>
+
+
     <!-- Message -->
     <div id="loading-message" style="display: none">Loading episodes...</div>
-
-    <div id="root"></div>
     <script type="module" src="script.js"></script>
   </body>
 </html>
