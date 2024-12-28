@@ -1,22 +1,27 @@
-import { renderShowOptions, showSelector } from "./createShowSelector.js";
 import { getAllEpisodePerShowFetch } from "./getEpisodesFetch.js";
+import {renderShowCards} from './createShowCards.js'
 import getData from "./services.js";
+
+
 
 const state = {
   allShows: [],
   allEpisodes: [],
 };
+const showNavbarCards = document.querySelector(".show-cards");
+const showsNavbar = document.querySelector(".shows-navbar");
+const filterSearch = document.querySelector("#show-live-filter");
+const filterDropDown = document.querySelector("#filtered-show-selector");
+const backToShowsBtn = document.querySelector("#back-to-shows");
+const episodesNarbar = document.querySelector(".episodes-navbar");
+const rootElem = document.getElementById("root");
 
 
 async function setup() {
-  const showNavbar = document.querySelector(".show-cards");
-  const filterSearch = document.querySelector("#show-live-filter");
-  const filterDropDown = document.querySelector("#filtered-show-selector");
-  
 
   state.allShows = await getData();
-  renderShowOptions(state.allShows);
-  renderShowCards(state.allShows, showNavbar);
+  episodesNarbar.style.display = "none";
+  renderShowCards(state.allShows, showNavbarCards);
 
   filterSearch.addEventListener('input', (event) => {
     filterDropDown.innerHTML = ``
@@ -41,12 +46,38 @@ async function setup() {
     });
     showFilteredNumber.textContent= ` Found : ${count} shows`
   })
-  // Add event listener to the show selector
-  showSelector.addEventListener("change", async (event) => {
-    const showId = event.target.value;
-    state.allEpisodes = await getAllEpisodePerShowFetch(showId);
-    updateEpisodes(state.allEpisodes);
+
+  filterDropDown.addEventListener("change", (event) => {
+    const chosenShowName = event.target.value;
+    if (chosenShowName == 'All Shows') {
+      const showItems = document.querySelectorAll(".show-card");
+      showItems.forEach((show) => {show.style.display = "block"})
+    } else {
+      const showItems = document.querySelectorAll(".show-card");
+      showItems.forEach((show) => {
+        const showText = show.querySelector(".title-show-card").textContent;
+        if (showText.includes(chosenShowName)) {
+          show.style.display = "block";
+        } else {
+          show.style.display = "none";
+        }
+      });
+    }
+  
   });
+
+  const allShowCards = document.querySelectorAll(".show-card")
+  allShowCards.forEach((card) => {
+    card.addEventListener("click",
+      async (event) => {
+        episodesNarbar.style.display = "block";
+        showsNavbar.style.display = "none";
+        const showId = event.currentTarget.getAttribute("data-id");
+        state.allEpisodes = await getAllEpisodePerShowFetch(showId);
+        updateEpisodes(state.allEpisodes);
+      })
+  })
+
 
   // Initial load: fetch and display episodes for the first show
   if (state.allShows.length > 0) {
@@ -54,39 +85,20 @@ async function setup() {
     state.allEpisodes = await getAllEpisodePerShowFetch(firstShowId);
     updateEpisodes(state.allEpisodes);
   }
+
+  backToShowsBtn.addEventListener("click", () => {
+    showsNavbar.style.display = "block";
+    episodesNarbar.style.display = "none";
+  })
 }
 
-// ==================== show Card =====================
-function renderShowCards(shows, parent) {
-  shows.forEach((showData) => {
-    parent.append(createShowCard(showData));
-  });
-}
-
-function createShowCard(showData) {
-  const newCard = document.createElement("div");
-  newCard.classList.add('show-card')
-  newCard.innerHTML = `<div class="title-show-card">${showData.name}</div>
-  <div class= "show-card-main">
-    <img src="${showData.image.medium}" alt="${showData.name}" />
-    <p>${showData.summary}</p>
-    <div class = "show-info"><span>Rated: ${showData.rating.average}</span>
-    <span>Genres: ${showData.genres.join(" |  ")}</span>
-    <span>Status: ${showData.status}</span>
-    <span>RunTime : ${showData.runtime}</span></div>;
-  </div>`;
-    
-  return newCard;
-}
-
-
+// ================================================ EPISODES =========================================
 
 function addZero(num) {
   return num < 10 ? `0${num}` : num;
 }
 
 function makePageForEpisodes(episodeList) {
-  const rootElem = document.getElementById("root");
   rootElem.innerHTML = ""; // Clear previous episodes
   const episodeCards = episodeList.map(createEpisodeCards);
   rootElem.append(...episodeCards);
@@ -103,14 +115,13 @@ function createEpisodeCards(episode) {
   return newCard;
 }
 
-// updates episodes on the page
 function updateEpisodes(episodes) {
   makePageForEpisodes(episodes);
   makeListOfEpisodeToSelect(episodes);
   displayMatchingEpisodes();
 }
 
-// ============================  LIVE SEARCH  =============================
+// ================================================ LIVE SEARCH ==============================================
 function displayMatchingEpisodes() {
   const liveSearchInput = document.querySelector("#live-search");
   const episodeListItems = document.querySelectorAll(".card");
@@ -136,16 +147,20 @@ function filterEpisodeBySearch(episodeListItems, liveSearchInput) {
   });
 }
 
-//===============Episode Selector creation Feature============================
+//============================================  Episode Selector creation Feature =================================
 const episodeSelectorTemplate = document.querySelector(
   "#episode-selector-temp"
 );
 const episodeSelectorTemplateClone =
   episodeSelectorTemplate.content.cloneNode(true);
-document.body.insertBefore(
-  episodeSelectorTemplateClone,
-  document.querySelector("#live-search")
-);
+const liveSearchElement = document.querySelector("#live-search");
+
+if (liveSearchElement) {
+  const parentElement = liveSearchElement.parentNode;
+  if (parentElement) {
+    parentElement.insertBefore(episodeSelectorTemplateClone, liveSearchElement);
+  }
+}
 
 const episodeSelector = document.querySelector("#episode-selector");
 
@@ -167,10 +182,10 @@ function createEpisodeToSelect(episode) {
   return episodeOption;
 }
 
-//====================Filter by Drop Down Select Feature=========================
-function filterEpisodeUsingDropDown(event) {
+//==================================================  Filter by Drop Down Select Feature =========================
+function filterEpisodeUsingDropDown(event, listClass = ".card") {
   const selectedEpisodeName = event.target.value.toLowerCase();
-  const episodeListItems = document.querySelectorAll(".card");
+  const episodeListItems = document.querySelectorAll(listClass);
   episodeListItems.forEach((episode) => {
     const episodeText = episode.textContent.toLocaleLowerCase();
     if (episodeText.includes(selectedEpisodeName)) {
@@ -180,10 +195,12 @@ function filterEpisodeUsingDropDown(event) {
     }
   });
 }
-//event lister for drop down option selection
+// ====================  event lister for drop down option selection
 episodeSelector.addEventListener("change", (event) => {
-  filterEpisodeUsingDropDown(event);
+  filterEpisodeUsingDropDown(event, '.card');
 });
+
+
 //=========================================================
 
 window.onload = setup;
